@@ -34,6 +34,14 @@ export default function Calculatrice() {
         // Traitement de l'opération
         const currentOperation = calcOperation.get(op);
         setRes(currentOperation.calc(val1, val2));
+    };
+
+    const handleChangeNb = (event, setNbValue) => {
+        const nb = event.target.value.replace('.', ',');
+
+        if(nb === '' || /^-?[0-9]*(,[0-9]*)?$/.test(nb)) {   
+            setNbValue(nb);
+        }
     }
 
     return (
@@ -44,7 +52,7 @@ export default function Calculatrice() {
                     <label htmlFor={inputId+'-nb1'}>Nb1 : </label>
                     <input type="text" id={inputId+'-nb1'} required
                         value={nb1}
-                        onChange={(e) => setNb1(e.target.value)} />
+                        onChange={(e) => handleChangeNb(e, setNb1)} />
                 </div>
                 <div>
                     <label htmlFor={inputId+'-op'}>Opé : </label>
@@ -61,7 +69,7 @@ export default function Calculatrice() {
                     <label htmlFor={inputId+'-nb2'}>Nb2 : </label>
                     <input type="text" id={inputId+'-nb2'} required
                         value={nb2}
-                        onChange={(e) => setNb2(e.target.value)} />
+                        onChange={(e) => handleChangeNb(e, setNb2)} />
                 </div>
                 <div>
                     <button type="submit">Calculer</button>
