@@ -1,19 +1,6 @@
 import { useId, useState } from "react";
-
-const calcOperation = new Map([
-    ['add', { display: '+', calc: (v1, v2) => v1 + v2 }],
-    ['sub', { display: '-', calc: (v1, v2) => v1 - v2 }],
-    ['mult', { display: 'x', calc: (v1, v2) => v1 * v2 }],
-    ['div', { display: '/', calc: (v1, v2) => v1 / v2 }],
-    ['puis', {display: '^', calc: (value, power) => {
-        let result = 1;
-        for(let i=0; i < power; i++) {
-            result *= value;
-        }
-        return result;
-    }}],
-    // ['puis', { display: '^', calc: (v1, v2) => v1 ** v2 }],
-]);
+import CalculHistory from "../../components/calcul-history/calcul-history.jsx";
+import { calcOperation } from "../../utils/operation.utils.js";
 
 export default function Calculatrice() {
 
@@ -22,6 +9,11 @@ export default function Calculatrice() {
     const [nb2, setNb2] = useState('');
     const [op, setOp] = useState(calcOperation.keys().next().value);
     const [res, setRes] = useState('');
+
+    const [history, setHistory] = useState([
+        { id: 1, nb1: '42', nb2: '3,14', op: 'add', res: '45,14' },
+        { id: 2, nb1: '10', nb2: '2', op: 'mult', res: '20' }
+    ]);
 
     const handleCalcSubmit = (event) => {
         event.preventDefault();
@@ -82,6 +74,9 @@ export default function Calculatrice() {
                         readOnly />
                 </div>
             </form>
+
+            <h2>Historique</h2>
+            <CalculHistory history={history} />
         </>
     );
 }
