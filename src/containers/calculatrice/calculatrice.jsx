@@ -15,13 +15,12 @@ const calcOperation = new Map([
     // ['puis', { display: '^', calc: (v1, v2) => v1 ** v2 }],
 ]);
 
-
 export default function Calculatrice() {
 
     const inputId = useId();
     const [nb1, setNb1] = useState('');
     const [nb2, setNb2] = useState('');
-    const [op, setOp] = useState(calcOperation.keys[0]);
+    const [op, setOp] = useState(calcOperation.keys().next().value);
     const [res, setRes] = useState('');
 
     const handleCalcSubmit = (event) => {
@@ -35,7 +34,7 @@ export default function Calculatrice() {
         const currentOperation = calcOperation.get(op);
         const currentResult = currentOperation.calc(val1, val2);
         const fixResult = Math.round(currentResult * 10e5) / 10e5;
-        setRes(fixResult);
+        setRes(fixResult.toLocaleString('fr-be'));
     };
 
     const handleChangeNb = (event, setNbValue) => {
