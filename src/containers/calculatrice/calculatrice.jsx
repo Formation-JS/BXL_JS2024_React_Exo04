@@ -33,13 +33,15 @@ export default function Calculatrice() {
         
         // Traitement de l'opération
         const currentOperation = calcOperation.get(op);
-        setRes(currentOperation.calc(val1, val2));
+        const currentResult = currentOperation.calc(val1, val2);
+        const fixResult = Math.round(currentResult * 10e5) / 10e5;
+        setRes(fixResult);
     };
 
     const handleChangeNb = (event, setNbValue) => {
         const nb = event.target.value.replace('.', ',');
 
-        if(nb === '' || /^-?[0-9]*(,[0-9]*)?$/.test(nb)) {   
+        if(nb === '' || /^-?[0-9]*(,[0-9]{0,5})?$/.test(nb)) {   
             setNbValue(nb);
         }
     }
