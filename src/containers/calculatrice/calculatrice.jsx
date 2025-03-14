@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import CalculHistory from "../../components/calcul-history/calcul-history.jsx";
 import { calcOperation } from "../../utils/operation.utils.js";
+import { nanoid } from "nanoid";
 
 export default function Calculatrice() {
 
@@ -11,8 +12,7 @@ export default function Calculatrice() {
     const [res, setRes] = useState('');
 
     const [history, setHistory] = useState([
-        { id: 1, nb1: '42', nb2: '3,14', op: 'add', res: '45,14' },
-        { id: 2, nb1: '10', nb2: '2', op: 'mult', res: '20' }
+        { id: nanoid(), nb1: '10', nb2: '2', op: 'mult', res: '20' }
     ]);
 
     const handleCalcSubmit = (event) => {
@@ -26,7 +26,11 @@ export default function Calculatrice() {
         const currentOperation = calcOperation.get(op);
         const currentResult = currentOperation.calc(val1, val2);
         const fixResult = Math.round(currentResult * 10e5) / 10e5;
-        setRes(fixResult.toLocaleString('fr-be'));
+        const result = fixResult.toLocaleString('fr-be')
+        setRes(result);
+
+        // Ajout dans l'historique
+        setHistory(tab => [{ id: nanoid(), nb1, nb2, op, res: result }, ...tab])
     };
 
     const handleChangeNb = (event, setNbValue) => {
