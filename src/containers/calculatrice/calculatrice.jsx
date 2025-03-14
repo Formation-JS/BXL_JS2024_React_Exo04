@@ -1,12 +1,19 @@
 import { useId, useState } from "react";
 
 const calcOperation = new Map([
-    ['add', { display: '+' }],
-    ['sub', { display: '-' }],
-    ['mult', { display: 'x' }],
-    ['div', { display: '/' }]
+    ['add', { display: '+', calc: (v1, v2) => v1 + v2 }],
+    ['sub', { display: '-', calc: (v1, v2) => v1 - v2 }],
+    ['mult', { display: 'x', calc: (v1, v2) => v1 * v2 }],
+    ['div', { display: '/', calc: (v1, v2) => v1 / v2 }],
+    ['puis', {display: '^', calc: (value, power) => {
+        let result = 1;
+        for(let i=0; i < power; i++) {
+            result *= value;
+        }
+        return result;
+    }}],
+    // ['puis', { display: '^', calc: (v1, v2) => v1 ** v2 }],
 ]);
-console.log(calcOperation);
 
 
 export default function Calculatrice() {
@@ -17,10 +24,22 @@ export default function Calculatrice() {
     const [op, setOp] = useState(calcOperation.keys[0]);
     const [res, setRes] = useState('');
 
+    const handleCalcSubmit = (event) => {
+        event.preventDefault();
+
+        // Conversion des valeurs pour les manipuler
+        const val1 = parseFloat(nb1.replace(',', '.'));
+        const val2 = parseFloat(nb2.replace(',', '.'));
+        
+        // Traitement de l'opération
+        const currentOperation = calcOperation.get(op);
+        setRes(currentOperation.calc(val1, val2));
+    }
+
     return (
         <>
             <h2>Calculatrice</h2>
-            <form>
+            <form onSubmit={handleCalcSubmit}>
                 <div>
                     <label htmlFor={inputId+'-nb1'}>Nb1 : </label>
                     <input type="text" id={inputId+'-nb1'} required
@@ -45,7 +64,7 @@ export default function Calculatrice() {
                         onChange={(e) => setNb2(e.target.value)} />
                 </div>
                 <div>
-                    <button>Calculer</button>
+                    <button type="submit">Calculer</button>
                 </div>
                 <div>
                     <label htmlFor={inputId+'-res'}>Res : </label>
